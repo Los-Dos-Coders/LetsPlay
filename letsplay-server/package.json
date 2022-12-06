@@ -4,10 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "tsc && node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
     "clean": "gts clean",
-    "compile": "tsc && node .",
+    "compile": "tsc",
     "dev": "tsc-watch --onSuccess \"npx nodemon --watch\"",
     "fix": "gts fix",
     "prepare": "npm run compile",
