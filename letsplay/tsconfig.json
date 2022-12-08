@@ -21,8 +21,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react"
+    // "paths": {
+    //   "@Models/*": ["../shared/models/*"]
+    // }
   },
   "include": [
     "src"
   ]
+  // "references": [{"path": "../shared"}],
 }
