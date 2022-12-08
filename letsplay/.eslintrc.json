@@ -11,5 +11,13 @@
     "react": {
       "version": "detect"
     }
+  },
+  "rules": {
+    "node/no-unpublished-import": ["error", 
+      {"allowModules": [
+        "miragejs", ".shared"
+        ]
+      }
+    ]
   }
 }
