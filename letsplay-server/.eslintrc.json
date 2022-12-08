@@ -7,5 +7,8 @@
     "jest": true
   },
   "settings": {
+  },
+  "rules": {
+    "node/no-unpublished-import": ["error", {"allowModules": ["supertest"]}]
   }
 }

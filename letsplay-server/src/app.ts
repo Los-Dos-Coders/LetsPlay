@@ -16,6 +16,4 @@ app.use(logger());
 
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(8000, () => {
-  console.log('Koa started on port 8000');
-});
+export = app;
