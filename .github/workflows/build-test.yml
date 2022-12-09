@@ -12,8 +12,7 @@ jobs:
         working-directory: ./letsplay
     strategy:
       matrix:
-        # node-version: [16.x, 18.x, 19.x]
-        node-version: [19.x]
+        node-version: [16.x, 18.x, 19.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }} to test Frontend
@@ -26,29 +25,29 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
 
-  # backend:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x, 18.x, 19.x]
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }} to test Backend
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: "npm"
-  #         cache-dependency-path: letsplay-server/package-lock.json
-  #     - run: cd ./letsplay-server
-  #     - run: pwd
-  #     - run: ls
-  #     - run: npm ci
-  #     - run: npm run build --if-present
-  #     - run: npm test
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./letsplay
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 19.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }} to test Backend
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: letsplay-server/package-lock.json
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
 
-  # end-to-end:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Build the Docker image
-  #       run: docker-compose build
+  end-to-end:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker-compose build
