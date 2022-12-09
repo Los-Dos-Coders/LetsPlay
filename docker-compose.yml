@@ -3,6 +3,7 @@ version: '3'
 services:
   frontend:
     build: ./letsplay
+    image: ghcr.io/los-dos-coders/letsplay-frontend
     ports:
       - "80:80"
     container_name: frontend-docker
@@ -12,6 +13,7 @@ services:
   
   backend:
     build: ./letsplay-server
+    image: ghcr.io/los-dos-coders/letsplay-backend
     ports:
       - "8000:8000"
     container_name: backend-docker
