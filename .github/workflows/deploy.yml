@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: 'DigitalOcean'
       - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Create Docker Context
         run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER }}@{{ secrets.SSH_HOST }}
       - name: Use Remote Context
