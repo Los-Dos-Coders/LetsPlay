@@ -30,10 +30,10 @@ jobs:
           images: |
             ghcr.io/los-dos-coders/letsplay-frontend
             ghcr.io/los-dos-coders/letsplay-backend
-      - name: Build Docker Image
-        run: docker-compose build
-      - name: Push the Docker Images to the repo
-        run: docker-compose push
+      # - name: Build Docker Image
+      #   run: docker-compose build
+      # - name: Push the Docker Images to the repo
+      #   run: docker-compose push
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
