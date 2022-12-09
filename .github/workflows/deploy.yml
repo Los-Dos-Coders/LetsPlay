@@ -1,7 +1,7 @@
 name: Deploy
 
 on:
-  pull_request:
+  push:
     branches: ["main"]
 
 env:
@@ -30,19 +30,19 @@ jobs:
           images: |
             ghcr.io/los-dos-coders/letsplay-frontend
             ghcr.io/los-dos-coders/letsplay-backend
-      # - name: Build Docker Image
-      #   run: docker-compose build
-      # - name: Push the Docker Images to the repo
-      #   run: docker-compose push
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: 'DigitalOcean'
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      - name: Create Docker Context
-        run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
-      - name: Start Up using Remote Context
-        run: docker-compose --context remote up -d
+      - name: Build Docker Image
+        run: docker-compose build
+      - name: Push the Docker Images to the repo
+        run: docker-compose push
+      # - name: Install SSH Key
+      #   uses: shimataro/ssh-key-action@v2
+      #   with:
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     known_hosts: 'DigitalOcean'
+      # - name: Adding Known Hosts
+      #   run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      # - name: Create Docker Context
+      #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
+      # - name: Start Up using Remote Context
+      #   run: docker-compose --context remote up -d
 
