@@ -61,5 +61,5 @@ jobs:
       - name: Create Docker Remote Context
         run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
       - name: Start Up Containers on Host Machine using the Remote Context
-        run: docker compose --context remote up -d
+        run: DOCKER_HOST="ssh:///${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}" docker compose up -d
       
