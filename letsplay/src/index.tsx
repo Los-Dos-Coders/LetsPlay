@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
-// import App from './App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 import startMirage from './mirage';
-import GameList from './GameList';
+// import GameList from './GameList';
 
 if (process.env.NODE_ENV === 'development') {
   startMirage();
@@ -15,8 +15,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <GameList />
+    <App />
+    {/* <GameList /> */}
   </React.StrictMode>
 );
 
