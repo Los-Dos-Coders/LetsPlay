@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  docker:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        - run: docker-compose build
+        - run: docker-compose push
+    deploy:
+      runs-on ubuntu-latest
+      steps:
+        - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'DigitalOcean'
+        - name: Adding Known Hosts
+          run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        - name: Create Docker Context
+          - run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER }}@{{ secrets.SSH_HOST }}
+          - run: docker context use remote
+          - run: docker-compose --context remote up -d
+
+
+  
