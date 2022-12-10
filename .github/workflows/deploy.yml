@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: ["shawnlong636/deployment"]
+    branches: ["main"]
   workflow_run:
     workflows: ["Build and Test"]
     types: [completed]
