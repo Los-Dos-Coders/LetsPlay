@@ -6,6 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/letsplay" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/letsplay-server" # Location of package manifests
+    schedule:
+      interval: "daily"
