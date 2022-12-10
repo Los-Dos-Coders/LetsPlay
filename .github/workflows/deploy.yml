@@ -3,18 +3,21 @@ name: Deploy
 on:
   push:
     branches: ["main"]
+  workflow_run:
+    workflows: ["Build and Test"]
+    types: [completed]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
       - name: Log in to the Container Registry
@@ -34,15 +37,20 @@ jobs:
         run: docker-compose build
       - name: Push the Docker Images to the repo
         run: docker-compose push
-      # - name: Install SSH Key
-      #   uses: shimataro/ssh-key-action@v2
-      #   with:
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     known_hosts: 'DigitalOcean'
-      # - name: Adding Known Hosts
-      #   run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      # - name: Create Docker Context
-      #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
-      # - name: Start Up using Remote Context
-      #   run: docker-compose --context remote up -d
-
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: ignore
+      - name: Get time on Host Machine via SSH
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'time'
+      - name: Pull Frontend Image on Host Machine
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-frontend'
+      - name: Pull Frontend Image on Host Machine
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-backend'
+      - name: Create Docker Remote Context
+        run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
+      - name: Start Up Containers on Host Machine using the Remote Context
+        run: docker --context remote compose up -d
