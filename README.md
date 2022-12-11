@@ -7,7 +7,7 @@
 <p align="center"><a href="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/build-test.yml" 
 target="_blank"><img src="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/build-test.yml/badge.svg" alt="build and test status badge" /></a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/deploy.yml" target="_blank"><img src="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/deploy.yml/badge.svg" alt="deploy badge" /></a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/codeql.yml" target="_blank"><img src="https://github.com/Los-Dos-Coders/LetsPlay/actions/workflows/codeql.yml/badge.svg" alt="codeql badge" /></a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/google/gts"><img src="https://img.shields.io/badge/code%20style-google-blueviolet.svg"></a>
 
-## 🕹️ Visit the [latest](http://164.92.72.53) version of the site!
+## 🕹️ Visit the [latest](http://letsplaytech.com) version of the site!
 
 We hope you enjoy!
 
