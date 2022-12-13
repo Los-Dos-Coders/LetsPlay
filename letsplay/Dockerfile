@@ -11,6 +11,7 @@ FROM certbot/dns-digitalocean:latest as certificates
 ARG DNS_DIGITALOCEAN_TOKEN
 ARG CERTBOT_EMAIL
 ARG DOMAIN
+ARG ENV
 
 WORKDIR /ssl
 COPY --from=build /app/nginx ./nginx
@@ -18,6 +19,7 @@ COPY --from=build /app/nginx ./nginx
 RUN export DNS_DIGITALOCEAN_TOKEN=${DNS_DIGITALOCEAN_TOKEN}
 RUN export CERTBOT_EMAIL=${CERTBOT_EMAIL}
 RUN export DOMAIN=${DOMAIN}
+RUN export ENV=${ENV}
 
 RUN chmod +x ./nginx/GetCertificates.sh
 RUN ./nginx/GetCertificates.sh

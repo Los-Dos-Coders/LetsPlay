@@ -3,16 +3,20 @@
 set -e
 
 requestFromCertbot() {
+
+  # Get Credentials
   touch ~/certbot-creds.ini
   chmod go-rwx ~/certbot-creds.ini
   echo dns_digitalocean_token = "$DNS_DIGITALOCEAN_TOKEN" >> ~/certbot-creds.ini
+
+  # Generate Certificate
   certbot certonly --dns-digitalocean --dns-digitalocean-credentials ~/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --test-cert --agree-tos --non-interactive
+
+  # Save Certificates
   cp /etc/letsencrypt/live/$DOMAIN/* /ssl
 }
 
 requestSelfSigned() {
-  echo "TODO: GENERATE SELF-SIGNED CERT AND SAVE IN /ssl"
-  echo "Files Needed: fullchain.pem and privkey.pem"
 
   # Install NSS
   apk add nss
@@ -35,6 +39,15 @@ getRecommendedConfig() {
   wget https://github.com/certbot/certbot/blob/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf?raw=true -O /ssl/options-ssl-nginx.conf
 }
 
-# requestFromCertbot
-requestSelfSigned
+
+# Main
 getRecommendedConfig
+if [ "$ENV" == "prod" ]; then
+  echo "Environment: Production => Requesting Production SSL via Certbot..."
+  sleep 10
+  requestFromCertbot
+else 
+  echo "Environment: Development => Requesting Self-Signed SSL..."
+  sleep 10
+  requestSelfSigned
+fi

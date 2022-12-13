@@ -6,6 +6,7 @@ services:
       context: ./letsplay
       args: 
         - DNS_DIGITALOCEAN_TOKEN=$DNS_DIGITALOCEAN_TOKEN
+        - ENV=$ENV
         - CERTBOT_EMAIL=shawnlong636@gmail.com
         - DOMAIN=letsplaytech.com
     image: ghcr.io/los-dos-coders/letsplay-frontend
