@@ -4,7 +4,6 @@ set -e
 
 requestFromCertbot() {
   
-  # TODO: MODIFY CERTBOT -> INSTALL ONTO NGINX CONTAINER
   # TODO: SETUP AUTORENEW USING CRONTAB
 
   ## SAMPLE SCRIPT TO RENEW
@@ -32,21 +31,15 @@ requestFromCertbot() {
 
 requestSelfSigned() {
 
-  # Install NSS
-  apk add nss
-
-  # Install mkcert
-  wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
-  cp mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
-  chmod +x /usr/local/bin/mkcert
 
   # Create Certificate Authority and Install Certificate
   mkcert -install
   mkcert localhost
 
   # Move and Rename Generated Certificates
-  mv ./localhost.pem /ssl/fullchain.pem
-  mv ./localhost-key.pem /ssl/privkey.pem
+  mkdir -p /etc/letsencrypt/live/letsplaytech.com
+  mv ./localhost.pem /etc/letsencrypt/live/letsplaytech.com/fullchain.pem
+  mv ./localhost-key.pem /etc/letsencrypt/live/letsplaytech.com/privkey.pem
 }
 
 getRecommendedConfig() {
