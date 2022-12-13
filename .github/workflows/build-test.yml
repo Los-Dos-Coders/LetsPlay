@@ -51,5 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Add Token to Env Var
+        run: export DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }}
       - name: Build the Docker image
         run: docker-compose build
