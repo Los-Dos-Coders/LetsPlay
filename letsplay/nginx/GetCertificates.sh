@@ -17,6 +17,8 @@ requestFromCertbot() {
 
   ## END SAMPLE SCRIPT
 
+  ## MAY NEED TO RUN nginx -s reload as a post renew hook
+
   # Get Credentials
   touch ~/certbot-creds.ini
   chmod go-rwx ~/certbot-creds.ini
