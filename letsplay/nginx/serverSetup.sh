@@ -24,8 +24,8 @@ addCronJobs() {
   mkdir -p ~/crontabs
   touch ~/crontabs/jobs.txt
 
-  # TODO: Add actual cron job and healthcheck
-  # echo "0 0 * * * certbot renew --post-hook \"nginx -s reload\" --test-cert && curl -m https://hc-ping.com/138fff81-9936-4bc8-9d72-6286bf2059ee" >>  ~/crontabs/jobs.txt
+  # TODO: Test actual cron job and healthcheck
+  printf "* * * * * /bin/sh /ssl/renewCertificate.sh\n" >>  ~/crontabs/jobs.txt
   
   crontab ~/crontabs/jobs.txt
 }
