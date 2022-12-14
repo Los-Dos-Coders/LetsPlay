@@ -21,19 +21,21 @@ installMkcert() {
 }
 
 addCronJobs() {
+  # Create Cron File
   mkdir -p ~/crontabs
   touch ~/crontabs/jobs.txt
 
-  # TODO: Test actual cron job and healthcheck
+  # Cron Jobs
   printf "* * * * * /bin/sh /ssl/renewCertificate.sh\n" >>  ~/crontabs/jobs.txt
-  
+
+  # Submit Cron Jobs to crontab
   crontab ~/crontabs/jobs.txt
 }
 
 installPreRequisites
 if [ "$ENV" = "prod" ]; then
   installCertbot
+  addCronJobs
 else
   installMkcert
 fi
-addCronJobs
