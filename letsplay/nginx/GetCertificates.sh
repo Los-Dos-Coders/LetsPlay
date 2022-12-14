@@ -6,29 +6,13 @@ requestFromCertbot() {
   
   # TODO: SETUP AUTORENEW USING CRONTAB
 
-  ## SAMPLE SCRIPT TO RENEW
-  # # add crontab entry to renew the letsencrypt certificate
-  # echo "adding crontab"
-  # echo "0 23 * * * certbot renew --dry-run" | crontab -
-
-  # # start nginx
-  # echo "starting nginx"
-  # nginx
-
-  ## END SAMPLE SCRIPT
-
-  ## MAY NEED TO RUN nginx -s reload as a post renew hook
-
   # Get Credentials
-  touch ~/certbot-creds.ini
-  chmod go-rwx ~/certbot-creds.ini
-  echo dns_digitalocean_token = "$DNS_DIGITALOCEAN_TOKEN" >> ~/certbot-creds.ini
+  touch /ssl/certbot-creds.ini
+  chmod go-rwx /ssl/certbot-creds.ini
+  echo dns_digitalocean_token = "$DNS_DIGITALOCEAN_TOKEN" >> /ssl/certbot-creds.ini
 
   # Generate Certificate
-  certbot certonly --dns-digitalocean --dns-digitalocean-credentials ~/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --test-cert --agree-tos --non-interactive
-
-  # Save Certificates
-  cp /etc/letsencrypt/live/$DOMAIN/* /ssl
+  certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --test-cert --agree-tos --non-interactive
 }
 
 requestSelfSigned() {

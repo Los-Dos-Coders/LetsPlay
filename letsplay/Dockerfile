@@ -19,9 +19,9 @@ COPY --from=build /app/nginx ./
 
 RUN chmod +x ./GetCertificates.sh
 RUN chmod +x ./CreateEnvVariables.sh
-RUN chmod +x ./installPackages.sh
+RUN chmod +x ./serverSetup.sh
 
-RUN ./installPackages.sh
+RUN ./serverSetup.sh
 RUN ./CreateEnvVariables.sh
 RUN ./GetCertificates.sh
 
