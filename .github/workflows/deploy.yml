@@ -51,10 +51,15 @@ jobs:
       - name: Get time on Host Machine via SSH
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'time'
       - name: Pull Frontend Image on Host Machine
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-frontend'
-      - name: Pull Frontend Image on Host Machine
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-backend'
-      - name: Create Docker Remote Context
-        run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
-      - name: Start Up Containers on Host Machine using the Remote Context
-        run: docker --context remote compose up -d
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker pull ghcr.io/los-dos-coders/letsplay-frontend'
+      - name: Pull Backend Image on Host Machine
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker pull ghcr.io/los-dos-coders/letsplay-backend'
+      - name: Copy Docker Compose File
+        run: scp ../../docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
+      - name: Deploy on Digital Ocean
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ 'ENV=prod &> /dev/null && DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }} &> /dev/null && docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker compose up -d'
+      # - name: Create Docker Remote Context
+      #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
+      # - name: Start Up Containers on Host Machine using the Remote Context
+      #   run: docker --context remote compose up -d
+
