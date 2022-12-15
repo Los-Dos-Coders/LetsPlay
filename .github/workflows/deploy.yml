@@ -52,7 +52,7 @@ jobs:
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker pull ghcr.io/los-dos-coders/letsplay-backend'
       - name: Copy Docker Compose File
         run: scp ../../docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
-      - name: 
+      - name: Deploy on Digital Ocean
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ 'ENV=prod &> /dev/null && DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }} &> /dev/null && docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker compose up -d'
       # - name: Create Docker Remote Context
       #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
