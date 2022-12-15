@@ -33,14 +33,10 @@ jobs:
           images: |
             ghcr.io/los-dos-coders/letsplay-frontend
             ghcr.io/los-dos-coders/letsplay-backend
-      - name: Add Digital Ocean Token to Env Var
-        run: export DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }}
-      - name: Set environment to production
-        run: export ENV="prod"
       - name: Build Docker Image
-        run: docker-compose build
+        run: docker compose build --build-arg ENV=prod --build-arg DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }}  
       - name: Push the Docker Images to the repo
-        run: docker-compose push
+        run: docker compose push
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -54,7 +50,11 @@ jobs:
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-frontend'
       - name: Pull Frontend Image on Host Machine
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker pull ghcr.io/los-dos-coders/letsplay-backend'
-      - name: Create Docker Remote Context
-        run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
-      - name: Start Up Containers on Host Machine using the Remote Context
-        run: docker --context remote compose up -d
+      - name: Copy Docker Compose File
+        run: scp ../../docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
+      - name: 
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'ENV=prod &> /dev/null && DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }} &> /dev/null && '
+      # - name: Create Docker Remote Context
+      #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
+      # - name: Start Up Containers on Host Machine using the Remote Context
+      #   run: docker --context remote compose up -d
