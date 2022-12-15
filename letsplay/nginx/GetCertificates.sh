@@ -11,6 +11,9 @@ requestFromCertbot() {
 
   # Generate Certificate
   certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --agree-tos --non-interactive
+
+  # Remove Credentials
+  rm -rf /ssl/certbot-creds.ini
 }
 
 requestSelfSigned() {

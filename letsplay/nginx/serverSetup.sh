@@ -3,16 +3,16 @@
 set -e
 
 installPreRequisites() {
-  apt-get update && apt-get install -y cron wget
+  apt-get update && apt-get install -y wget
 }
 
-installCertbot() {
-  apt-get install -y python3-pip
+installProductionPackages() {
+  apt-get install -y cron python3-pip
   pip3 install certbot
   pip3 install certbot-dns-digitalocean
 }
 
-installMkcert() {
+installDevelopmentPackages() {
   apt-get install -y libnss3-tools
   wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
   cp mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
@@ -35,8 +35,8 @@ addCronJobs() {
 
 installPreRequisites
 if [ "$ENV" = "prod" ]; then
-  installCertbot
+  installProductionPackages
   addCronJobs
 else
-  installMkcert
+  installDevelopmentPackages
 fi
