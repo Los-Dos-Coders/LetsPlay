@@ -2,15 +2,22 @@ version: '3'
 
 services:
   frontend:
-    build: ./letsplay
+    build: 
+      context: ./letsplay
+      args: 
+        - DNS_DIGITALOCEAN_TOKEN=$DNS_DIGITALOCEAN_TOKEN
+        - ENV=$ENV
+        - CERTBOT_EMAIL=shawnlong636@gmail.com
+        - DOMAIN=letsplaytech.com
     image: ghcr.io/los-dos-coders/letsplay-frontend
     ports:
       - "80:80"
+      - "443:443"
     container_name: frontend-docker
     restart: always
     links:
       - backend
-  
+
   backend:
     build: ./letsplay-server
     image: ghcr.io/los-dos-coders/letsplay-backend

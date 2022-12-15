@@ -33,8 +33,12 @@ jobs:
           images: |
             ghcr.io/los-dos-coders/letsplay-frontend
             ghcr.io/los-dos-coders/letsplay-backend
+      - name: Add Digital Ocean Token to Env Var
+        run: export DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }}
       - name: Build Docker Image
         run: docker-compose build
+      - name: Set environment to production
+        run: export env="prod"
       - name: Push the Docker Images to the repo
         run: docker-compose push
       - name: Install SSH Key
