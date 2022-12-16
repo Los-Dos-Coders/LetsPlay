@@ -1,13 +1,7 @@
 import useSWR from 'swr';
 import axios from 'axios';
 import React from 'react';
-
-interface Game {
-  name: string;
-  genre: string;
-  coopCount: number;
-  multiplayerCount: number;
-}
+import {Game} from 'letsplay-models';
 
 const GameList = (): JSX.Element => {
   const fetcher = (url: string) => axios.get(url).then(res => res.data);
