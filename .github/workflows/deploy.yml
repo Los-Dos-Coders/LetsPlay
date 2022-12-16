@@ -10,6 +10,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  DNS_DIGITALOCEAN_TOKEN: ${{ secrets.DNS_DIGITALOCEAN_TOKEN }}
+  ENV: prod
 
 jobs:
   deploy:
@@ -33,12 +35,8 @@ jobs:
           images: |
             ghcr.io/los-dos-coders/letsplay-frontend
             ghcr.io/los-dos-coders/letsplay-backend
-      - name: Add Digital Ocean Token to Env Var
-        run: export DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }}
-      - name: Set environment to production
-        run: export ENV="prod"
       - name: Build Docker Image
-        run: docker-compose build
+        run: docker compose build --build-arg DNS_DIGITALOCEAN_TOKEN --build-arg ENV
       - name: Push the Docker Images to the repo
         run: docker-compose push
       - name: Install SSH Key
@@ -48,18 +46,7 @@ jobs:
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           if_key_exists: ignore
-      - name: Get time on Host Machine via SSH
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'time'
-      - name: Pull Frontend Image on Host Machine
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker pull ghcr.io/los-dos-coders/letsplay-frontend'
-      - name: Pull Backend Image on Host Machine
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker pull ghcr.io/los-dos-coders/letsplay-backend'
-      - name: Copy Docker Compose File
-        run: scp ../../docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
-      - name: Deploy on Digital Ocean
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ 'ENV=prod &> /dev/null && DNS_DIGITALOCEAN_TOKEN=${{ secrets.DNS_DIGITALOCEAN_TOKEN }} &> /dev/null && docker login --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }} &> /dev/null && docker compose up -d'
-      # - name: Create Docker Remote Context
-      #   run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
-      # - name: Start Up Containers on Host Machine using the Remote Context
-      #   run: docker --context remote compose up -d
-
+      - name: Create Docker Remote Context
+        run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
+      - name: Start Up Containers on Host Machine using the Remote Context
+        run: docker --context remote compose pull && docker --context remote compose up -d

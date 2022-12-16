@@ -9,7 +9,7 @@ services:
         - ENV=$ENV
         - CERTBOT_EMAIL=shawnlong636@gmail.com
         - DOMAIN=letsplaytech.com
-    image: ghcr.io/los-dos-coders/letsplay-frontend
+    image: ghcr.io/los-dos-coders/letsplay-frontend:latest
     ports:
       - "80:80"
       - "443:443"
@@ -20,7 +20,7 @@ services:
 
   backend:
     build: ./letsplay-server
-    image: ghcr.io/los-dos-coders/letsplay-backend
+    image: ghcr.io/los-dos-coders/letsplay-backend:latest
     ports:
       - "8000:8000"
     container_name: backend-docker
