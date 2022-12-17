@@ -66,6 +66,7 @@ jobs:
         run: while [[ "$(docker-compose ps --services --filter state=unhealthy)" == "" ]]; do sleep 1; echo sleep 1; done;
       - name: Run Tests
         run: npm test
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
         with:
