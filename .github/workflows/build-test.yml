@@ -51,5 +51,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19'
       - name: Build the Docker image
-        run: docker-compose build
+        run: docker-compose up -d --build
+      - name: Change to e2e directory
+        run: cd ./e2e
+      - name: Install Dependencies
+        run: npm clean-install
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Wait Until Docker Containers Healthy
+        run: while [[ "$(docker-compose ps --services --filter state=unhealthy)" == "" ]]; do sleep 1; echo sleep 1; done;
+      - name: Run Tests
+        run: npm test
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report
+      - name: Shut Down Container
+        run: cd ../ && docker-compose down
