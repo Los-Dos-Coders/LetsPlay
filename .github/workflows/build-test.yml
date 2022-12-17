@@ -62,8 +62,8 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
         working-directory: e2e
-      - name: Wait Until Docker Containers Healthy
-        run: while [[ "$(docker-compose ps --services --filter state=unhealthy)" == "" ]]; do sleep 1; echo sleep 1; done;
+      - name: Wait 60s for Container to Start Up
+        run: sleep 60
       - name: Run Tests
         run: npm test
         working-directory: e2e
