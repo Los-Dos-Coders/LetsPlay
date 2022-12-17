@@ -59,7 +59,7 @@ jobs:
       - name: Change to e2e directory
         run: cd ./e2e
       - name: Install Dependencies
-        run: npm clean-install
+        run: npm install
       - name: Install Playwright
         run: npx playwright install --with-deps
       - name: Wait Until Docker Containers Healthy
