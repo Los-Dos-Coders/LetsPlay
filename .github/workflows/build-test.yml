@@ -51,5 +51,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker-compose build
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19'
+      - name: Build and Start Docker Containers
+        run: docker-compose up -d --build
+      - name: Install Dependencies
+        run: npm clean-install
+        working-directory: e2e
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+        working-directory: e2e
+      - name: Wait 60s for Container to Start Up
+        run: sleep 60
+      - name: Run Tests
+        run: xvfb-run npx playwright test --browser=all
+        working-directory: e2e
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report
+      - name: Shut Down Container
+        run: docker-compose down
