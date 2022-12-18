@@ -28,6 +28,7 @@ requestSelfSigned() {
 getRecommendedConfig() {
   # Download Official LetsEncrypt Nginx Config
   wget https://github.com/certbot/certbot/blob/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf?raw=true -O /ssl/options-ssl-nginx.conf
+  openssl dhparam -out /ssl/dhparam.pem 4096
 }
 
 # Main
