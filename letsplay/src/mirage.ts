@@ -1,11 +1,5 @@
 import {createServer, Model} from 'miragejs';
-
-interface Game {
-  name: string;
-  genre: string;
-  coopCount: number;
-  multiplayerCount: number;
-}
+import {Game} from 'letsplay-models';
 
 const startMirage = () => {
   return createServer({
