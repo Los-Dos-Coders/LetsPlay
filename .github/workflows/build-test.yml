@@ -54,11 +54,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '19'
-      - name: Build and Start Docker Containers
-        run: docker-compose up -d --build
       - name: Install Dependencies
         run: npm clean-install
         working-directory: e2e
+      - name: Build Docker Containers
+        run: docker compose build
+      - name: Start up Docker Containers
+        run: docker compose up -d
       - name: Install Playwright
         run: npx playwright install --with-deps
         working-directory: e2e
