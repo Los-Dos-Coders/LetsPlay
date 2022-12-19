@@ -10,7 +10,7 @@ requestFromCertbot() {
   echo dns_digitalocean_token = "$DNS_DIGITALOCEAN_TOKEN" >> /ssl/certbot-creds.ini
 
   # Generate Certificate
-  certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --agree-tos --non-interactive --test-cert
+  certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --agree-tos --non-interactive
 }
 
 requestSelfSigned() {
@@ -28,7 +28,6 @@ requestSelfSigned() {
 getRecommendedConfig() {
   # Download Official LetsEncrypt Nginx Config
   wget https://github.com/certbot/certbot/blob/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf?raw=true -O /ssl/options-ssl-nginx.conf
-  openssl dhparam -out /ssl/dhparam.pem 4096
 }
 
 # Main
@@ -36,7 +35,11 @@ getRecommendedConfig
 if [ "$ENV" = "prod" ]; then
   echo "Environment: Production => Requesting Production SSL via Certbot..."
   requestFromCertbot
+  echo "Generating Large DH Params"
+  openssl dhparam -out /ssl/dhparam.pem 4096
 else 
   echo "Environment: Development => Requesting Self-Signed SSL..."
   requestSelfSigned
+  echo "Generating Small DH Params"
+  openssl dhparam -out /ssl/dhparam.pem 2048
 fi
