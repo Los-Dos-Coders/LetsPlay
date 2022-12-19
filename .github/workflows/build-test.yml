@@ -68,6 +68,7 @@ jobs:
         run: xvfb-run npx playwright test --browser=all
         working-directory: e2e
       - name: Upload test results
+        working-directory: e2e
         if: always()
         uses: actions/upload-artifact@v3
         with:
