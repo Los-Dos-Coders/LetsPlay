@@ -64,6 +64,8 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
         working-directory: e2e
+      - name: Sleep 30s
+        run: sleep 30
       - name: Run Tests
         run: xvfb-run npx playwright test --browser=all
         working-directory: e2e

@@ -41,5 +41,5 @@ else
   echo "Environment: Development => Requesting Self-Signed SSL..."
   requestSelfSigned
   echo "Generating Small DH Params"
-  openssl dhparam -out /ssl/dhparam.pem 512
+  openssl dhparam -out /ssl/dhparam.pem 2048
 fi
