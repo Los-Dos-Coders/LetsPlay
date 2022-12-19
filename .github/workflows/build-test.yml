@@ -62,8 +62,6 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
         working-directory: e2e
-      - name: Wait 60s for Container to Start Up
-        run: sleep 60
       - name: Run Tests
         run: xvfb-run npx playwright test --browser=all
         working-directory: e2e

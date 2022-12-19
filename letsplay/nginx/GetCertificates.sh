@@ -10,7 +10,7 @@ requestFromCertbot() {
   echo dns_digitalocean_token = "$DNS_DIGITALOCEAN_TOKEN" >> /ssl/certbot-creds.ini
 
   # Generate Certificate
-  certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --agree-tos --non-interactive --test-cert
+  certbot certonly --dns-digitalocean --dns-digitalocean-credentials /ssl/certbot-creds.ini --email "$CERTBOT_EMAIL" -d "$DOMAIN" --agree-tos --non-interactive
 }
 
 requestSelfSigned() {
