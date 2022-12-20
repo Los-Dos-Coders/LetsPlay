@@ -48,5 +48,7 @@ jobs:
           if_key_exists: ignore
       - name: Create Docker Remote Context
         run: docker context create remote --docker "host=ssh://${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }}"
+      - name: Prune Existing Docker Images
+        run: docker image prune --all --force
       - name: Start Up Containers on Host Machine using the Remote Context
         run: docker --context remote compose pull && docker --context remote compose up -d
